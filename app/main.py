@@ -9,6 +9,10 @@ app = FastAPI()
 def on_startup():
     create_db_and_tables()
 
+@app.get("/")
+def root():
+    return {"status":"Backend is awake!"}
+
 @app.post("/patientcreate")
 def patient_create(patient : Patient,session : SessionDep):
     patient=Patient.model_validate(patient)
