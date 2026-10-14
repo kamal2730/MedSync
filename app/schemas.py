@@ -1,8 +1,8 @@
 from datetime import date
 
-from pydantic import BaseModel
+from pydantic import BaseModel,Field
 
-class UserCreate(BaseModel):
+class PatientCreate(BaseModel):
     patient_id: str
     first_name: str
     last_name: str
@@ -15,8 +15,6 @@ class UserCreate(BaseModel):
 class ClaimCreate(BaseModel):
     claim_id: int
     patient_id: str
-    diagnosis_code: str
+    diagnosis_code: str = Field(...,pattern=r"^[A-Z]\d{2}(\.\d{1,4})?$")
     claimed_amount: int
     clinical_notes: str
-
-    

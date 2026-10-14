@@ -1,12 +1,25 @@
 from fastapi import FastAPI
-from app.schemas import UserCreate,ClaimCreate
+from app.models import Patient,Claim,create_db_and_tables
+from app.database import SessionDep
+
 
 app = FastAPI()
 
-@app.post("/usercreate")
-def user_create(user : UserCreate):
-    return {"name": user.first_name}
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
+
+@app.post("/patientcreate")
+def patient_create(patient : Patient,session : SessionDep):
+    patient=Patient.model_validate(patient)
+    session.add(patient)
+    session.commit()
+    session.refresh(patient)
+    return {"name": patient.first_name}
 
 @app.post("/claimcreate")
-def claim_create(claim : ClaimCreate):
+def claim_create(claim : Claim,session : SessionDep):
+    session.add(claim)
+    session.commit()
+    session.refresh(claim)
     return {"name": claim.claim_id}
