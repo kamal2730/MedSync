@@ -18,3 +18,12 @@ class ClaimCreate(BaseModel):
     diagnosis_code: str = Field(...,pattern=r"^[A-Z]\d{2}(\.\d{1,4})?$")
     claimed_amount: int
     clinical_notes: str
+
+class AiRequest(BaseModel):
+    diagnosis_code: str 
+    clinical_notes: str
+
+class RiskAssesment(BaseModel):
+    risk_score: float
+    risk_level: str
+    audit_recommendation: str

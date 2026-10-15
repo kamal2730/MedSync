@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.models import Patient,Claim,create_db_and_tables
 from app.database import SessionDep
+from app.schemas import AiRequest
+from app.service.groq_service import evaluvate_claim_risk
 
 
 app = FastAPI()
@@ -27,3 +29,8 @@ def claim_create(claim : Claim,session : SessionDep):
     session.commit()
     session.refresh(claim)
     return {"name": claim.claim_id}
+
+@app.post("/AiRiskChecker")
+async def ai(request: AiRequest):
+    response= await evaluvate_claim_risk(request)
+    return response
